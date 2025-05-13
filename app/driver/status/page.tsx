@@ -50,4 +50,6 @@ const statusUpdates = {
       status: "Scheduled",
       time: "1:30 PM - 3:30 PM",
       notes: "",
-    },\
+    },
+  ],
+}
