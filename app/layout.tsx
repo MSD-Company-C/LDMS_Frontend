@@ -1,13 +1,14 @@
 import type React from "react"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "LogiTrack - Logistics & Transportation Management System",
-  description: "Efficient logistics and delivery management system",
+  title: "Logistics & Delivery Management System",
+  description: "A comprehensive logistics and delivery management platform",
     generator: 'v0.dev'
 }
 
@@ -19,8 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light">
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

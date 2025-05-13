@@ -2,122 +2,211 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { MainLayout } from "@/components/main-layout"
+import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import { ArrowDown, ArrowUp, Download, Filter, MoreHorizontal, Plus, Search } from "lucide-react"
+  BarChart3,
+  Package,
+  Truck,
+  Users,
+  AlertTriangle,
+  CheckCircle2,
+  FileBarChart,
+  Warehouse,
+  Plus,
+  Search,
+  MoreHorizontal,
+  Download,
+  Filter,
+} from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { ExportCSV } from "@/components/export-csv"
+
+// Admin navigation items
+const adminNavItems = [
+  { title: "Dashboard", href: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
+  { title: "Orders", href: "/admin/orders", icon: <Package className="h-4 w-4 mr-2" /> },
+  { title: "Drivers", href: "/admin/drivers", icon: <Truck className="h-4 w-4 mr-2" /> },
+  { title: "Inventory", href: "/admin/inventory", icon: <Warehouse className="h-4 w-4 mr-2" /> },
+  { title: "Issues", href: "/admin/issues", icon: <AlertTriangle className="h-4 w-4 mr-2" /> },
+  { title: "Proof of Delivery", href: "/admin/pod", icon: <CheckCircle2 className="h-4 w-4 mr-2" /> },
+  { title: "Reports", href: "/admin/reports", icon: <FileBarChart className="h-4 w-4 mr-2" /> },
+  { title: "Users", href: "/admin/users", icon: <Users className="h-4 w-4 mr-2" /> },
+]
+
+// Mock order data
+const orders = [
+  {
+    id: "ORD-1234",
+    customer: "John Doe",
+    address: "123 Main St, New York, NY",
+    date: "2023-06-10",
+    status: "Delivered",
+    driver: "Michael R.",
+    amount: "$124.99",
+  },
+  {
+    id: "ORD-1235",
+    customer: "Jane Smith",
+    address: "456 Park Ave, New York, NY",
+    date: "2023-06-10",
+    status: "In Transit",
+    driver: "Sarah L.",
+    amount: "$89.50",
+  },
+  {
+    id: "ORD-1236",
+    customer: "Robert Johnson",
+    address: "789 Broadway, New York, NY",
+    date: "2023-06-10",
+    status: "Processing",
+    driver: "Unassigned",
+    amount: "$210.75",
+  },
+  {
+    id: "ORD-1237",
+    customer: "Emily Davis",
+    address: "321 5th Ave, New York, NY",
+    date: "2023-06-09",
+    status: "Delivered",
+    driver: "Michael R.",
+    amount: "$56.20",
+  },
+  {
+    id: "ORD-1238",
+    customer: "Michael Wilson",
+    address: "654 Madison Ave, New York, NY",
+    date: "2023-06-09",
+    status: "Failed Delivery",
+    driver: "James T.",
+    amount: "$145.00",
+  },
+  {
+    id: "ORD-1239",
+    customer: "Sophia Martinez",
+    address: "987 Lexington Ave, New York, NY",
+    date: "2023-06-09",
+    status: "Scheduled",
+    driver: "Unassigned",
+    amount: "$78.30",
+  },
+  {
+    id: "ORD-1240",
+    customer: "Daniel Taylor",
+    address: "135 West End Ave, New York, NY",
+    date: "2023-06-08",
+    status: "Delivered",
+    driver: "Sarah L.",
+    amount: "$192.45",
+  },
+  {
+    id: "ORD-1241",
+    customer: "Olivia Brown",
+    address: "246 East 42nd St, New York, NY",
+    date: "2023-06-08",
+    status: "Cancelled",
+    driver: "N/A",
+    amount: "$0.00",
+  },
+  {
+    id: "ORD-1242",
+    customer: "William Anderson",
+    address: "753 3rd Ave, New York, NY",
+    date: "2023-06-08",
+    status: "Delivered",
+    driver: "James T.",
+    amount: "$67.80",
+  },
+  {
+    id: "ORD-1243",
+    customer: "Ava Thomas",
+    address: "951 7th Ave, New York, NY",
+    date: "2023-06-07",
+    status: "Delivered",
+    driver: "Michael R.",
+    amount: "$134.25",
+  },
+]
 
 export default function OrdersPage() {
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
 
-  // Mock data for orders
-  const orders = [
-    { id: "ORD-12345", customer: "John Smith", date: "May 11, 2025", items: 3, total: "$156.99", status: "Delivered" },
-    {
-      id: "ORD-12346",
-      customer: "Sarah Williams",
-      date: "May 11, 2025",
-      items: 2,
-      total: "$89.50",
-      status: "In Transit",
-    },
-    {
-      id: "ORD-12347",
-      customer: "Robert Brown",
-      date: "May 10, 2025",
-      items: 1,
-      total: "$45.99",
-      status: "Out for Delivery",
-    },
-    {
-      id: "ORD-12348",
-      customer: "Emily Davis",
-      date: "May 10, 2025",
-      items: 4,
-      total: "$210.75",
-      status: "Processing",
-    },
-    {
-      id: "ORD-12349",
-      customer: "Michael Miller",
-      date: "May 9, 2025",
-      items: 2,
-      total: "$78.25",
-      status: "Processing",
-    },
-    {
-      id: "ORD-12350",
-      customer: "Jessica Wilson",
-      date: "May 9, 2025",
-      items: 3,
-      total: "$125.50",
-      status: "Delivered",
-    },
-    { id: "ORD-12351", customer: "David Moore", date: "May 8, 2025", items: 1, total: "$35.99", status: "Delivered" },
-    {
-      id: "ORD-12352",
-      customer: "Jennifer Taylor",
-      date: "May 8, 2025",
-      items: 5,
-      total: "$245.75",
-      status: "Delivered",
-    },
-    {
-      id: "ORD-12353",
-      customer: "Christopher Anderson",
-      date: "May 7, 2025",
-      items: 2,
-      total: "$95.50",
-      status: "Delivered",
-    },
-    {
-      id: "ORD-12354",
-      customer: "Amanda Thomas",
-      date: "May 7, 2025",
-      items: 3,
-      total: "$145.25",
-      status: "Delivered",
-    },
-  ]
+  // Filter orders based on search query and status filter
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch =
+      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.address.toLowerCase().includes(searchQuery.toLowerCase())
 
-  const toggleSort = () => {
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+    const matchesStatus = statusFilter === "all" || order.status.toLowerCase() === statusFilter.toLowerCase()
+
+    return matchesSearch && matchesStatus
+  })
+
+  // Function to get badge color based on status
+  const getStatusBadge = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "delivered":
+        return (
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            Delivered
+          </Badge>
+        )
+      case "in transit":
+        return (
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            In Transit
+          </Badge>
+        )
+      case "processing":
+        return (
+          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+            Processing
+          </Badge>
+        )
+      case "scheduled":
+        return (
+          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+            Scheduled
+          </Badge>
+        )
+      case "failed delivery":
+        return (
+          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+            Failed Delivery
+          </Badge>
+        )
+      case "cancelled":
+        return (
+          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+            Cancelled
+          </Badge>
+        )
+      default:
+        return <Badge variant="outline">{status}</Badge>
+    }
   }
 
   return (
-    <MainLayout userRole="admin" userName="Admin User">
-      <div className="space-y-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <DashboardLayout navItems={adminNavItems} userType="admin">
+      <div className="container py-6">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
-            <p className="text-muted-foreground">Manage and track all customer orders in the system.</p>
+            <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
+            <p className="text-muted-foreground">Manage and track all customer orders</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button asChild>
-              <Link href="/admin/orders/new">
+          <div className="flex gap-2">
+            <Link href="/admin/orders/new">
+              <Button>
                 <Plus className="mr-2 h-4 w-4" />
                 New Order
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             <Button variant="outline">
               <Download className="mr-2 h-4 w-4" />
               Export CSV
@@ -125,38 +214,35 @@ export default function OrdersPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="flex w-full items-center space-x-2 md:w-1/3">
-            <div className="relative w-full">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input type="search" placeholder="Search orders..." className="w-full pl-8" />
-            </div>
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search orders..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-
-          <div className="flex flex-1 items-center space-x-2">
-            <Select defaultValue="all">
-              <SelectTrigger className="w-full md:w-[180px]">
-                <SelectValue placeholder="Status" />
+          <div className="flex gap-2">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]">
+                <div className="flex items-center">
+                  <Filter className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="Filter by status" />
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="in-transit">In Transit</SelectItem>
-                <SelectItem value="out-for-delivery">Out for Delivery</SelectItem>
                 <SelectItem value="delivered">Delivered</SelectItem>
-                <SelectItem value="failed">Failed Delivery</SelectItem>
+                <SelectItem value="in transit">In Transit</SelectItem>
+                <SelectItem value="processing">Processing</SelectItem>
+                <SelectItem value="scheduled">Scheduled</SelectItem>
+                <SelectItem value="failed delivery">Failed Delivery</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
-
-            <Button variant="outline" size="icon">
-              <Filter className="h-4 w-4" />
-              <span className="sr-only">Filter</span>
-            </Button>
-
-            <Button variant="outline" size="icon" onClick={toggleSort}>
-              {sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
-              <span className="sr-only">Sort</span>
-            </Button>
+            <ExportCSV data={orders} filename="orders-export.csv" buttonText="Export Orders" />
           </div>
         </div>
 
@@ -164,102 +250,66 @@ export default function OrdersPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Order ID</TableHead>
+                <TableHead>Order ID</TableHead>
                 <TableHead>Customer</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-center">Items</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead className="hidden md:table-cell">Date</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead className="hidden md:table-cell">Driver</TableHead>
+                <TableHead className="hidden lg:table-cell">Amount</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">
-                    <Link href={`/admin/orders/${order.id}`} className="text-primary hover:underline">
+                    <Link href={`/admin/orders/${order.id}`} className="hover:underline">
                       {order.id}
                     </Link>
                   </TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell className="text-center">{order.items}</TableCell>
-                  <TableCell className="text-right">{order.total}</TableCell>
                   <TableCell>
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        order.status === "Delivered"
-                          ? "bg-green-100 text-green-800"
-                          : order.status === "In Transit"
-                            ? "bg-blue-100 text-blue-800"
-                            : order.status === "Out for Delivery"
-                              ? "bg-purple-100 text-purple-800"
-                              : order.status === "Processing"
-                                ? "bg-gray-100 text-gray-800"
-                                : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
+                    <div>
+                      <div>{order.customer}</div>
+                      <div className="text-xs text-muted-foreground hidden sm:block">{order.address}</div>
+                    </div>
                   </TableCell>
+                  <TableCell className="hidden md:table-cell">{order.date}</TableCell>
+                  <TableCell>{getStatusBadge(order.status)}</TableCell>
+                  <TableCell className="hidden md:table-cell">{order.driver}</TableCell>
+                  <TableCell className="hidden lg:table-cell">{order.amount}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
                           <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Actions</span>
+                          <span className="sr-only">Open menu</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/admin/orders/${order.id}`}>View Details</Link>
+                        <DropdownMenuItem>
+                          <Link href={`/admin/orders/${order.id}`} className="w-full">
+                            View details
+                          </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Edit Order</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Assign Driver</DropdownMenuItem>
-                        <DropdownMenuItem>Print Label</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">Cancel Order</DropdownMenuItem>
+                        <DropdownMenuItem>Edit order</DropdownMenuItem>
+                        <DropdownMenuItem>Assign driver</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">Cancel order</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
+              {filteredOrders.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="h-24 text-center">
+                    No orders found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
-
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Showing <strong>1</strong> to <strong>10</strong> of <strong>100</strong> results
-          </div>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
       </div>
-    </MainLayout>
+    </DashboardLayout>
   )
 }

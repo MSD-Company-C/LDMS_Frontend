@@ -1,69 +1,56 @@
+"use client"
+
 import Link from "next/link"
-import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MapView } from "@/components/map-view"
+import { Timeline } from "@/components/timeline"
+import { Logo } from "@/components/logo"
+import { StatusBadge } from "@/components/status-badge"
 import {
-  BarChart3,
-  Package,
-  Truck,
-  Users,
-  AlertTriangle,
-  CheckCircle2,
-  FileBarChart,
-  Warehouse,
-  ArrowLeft,
-  Pencil,
-  Trash2,
-  Clock,
-  MapPin,
-  Phone,
-  User,
-  Mail,
   Calendar,
+  ArrowLeft,
+  Truck,
+  MapPin,
+  Package,
+  Clock,
+  CheckCircle2,
+  User,
+  Phone,
+  Mail,
+  FileText,
+  DollarSign,
+  Printer,
+  Share2,
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { MapView } from "@/components/map-view"
 
-// Admin navigation items
-const adminNavItems = [
-  { title: "Dashboard", href: "/admin/dashboard", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
-  { title: "Orders", href: "/admin/orders", icon: <Package className="h-4 w-4 mr-2" /> },
-  { title: "Drivers", href: "/admin/drivers", icon: <Truck className="h-4 w-4 mr-2" /> },
-  { title: "Inventory", href: "/admin/inventory", icon: <Warehouse className="h-4 w-4 mr-2" /> },
-  { title: "Issues", href: "/admin/issues", icon: <AlertTriangle className="h-4 w-4 mr-2" /> },
-  { title: "Proof of Delivery", href: "/admin/pod", icon: <CheckCircle2 className="h-4 w-4 mr-2" /> },
-  { title: "Reports", href: "/admin/reports", icon: <FileBarChart className="h-4 w-4 mr-2" /> },
-  { title: "Users", href: "/admin/users", icon: <Users className="h-4 w-4 mr-2" /> },
-]
-
-interface OrderDetailPageProps {
+interface OrderDetailsPageProps {
   params: {
     orderId: string
   }
 }
 
-export default function OrderDetailPage({ params }: OrderDetailPageProps) {
+export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const { orderId } = params
 
   // Mock data - in a real app, this would come from an API call
   const orderData = {
     id: orderId,
     status: "In Transit",
+    estimatedDelivery: "Today, 2:00 PM - 4:00 PM",
     createdAt: "June 10, 2023 at 9:30 AM",
-    estimatedDelivery: "June 10, 2023, 2:00 PM - 4:00 PM",
     customer: {
       name: "John Doe",
-      email: "john.doe@example.com",
-      phone: "+1 (555) 123-4567",
       address: "123 Main St, New York, NY 10001",
+      phone: "+1 (555) 123-4567",
+      email: "john.doe@example.com",
     },
     driver: {
       name: "Michael Rodriguez",
-      id: "DRV-789",
-      phone: "+1 (555) 987-6543",
       vehicle: "White Van - XYZ 1234",
+      phone: "+1 (555) 987-6543",
       location: {
         lat: 40.7128,
         lng: -74.006,
@@ -80,6 +67,8 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
       tax: "$14.00",
       total: "$189.95",
       method: "Credit Card (ending in 4242)",
+      status: "Paid",
+      date: "June 10, 2023",
     },
     timeline: [
       { status: "Order Placed", time: "Jun 10, 9:30 AM", completed: true },
@@ -87,88 +76,40 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
       { status: "Out for Delivery", time: "Jun 10, 1:15 PM", completed: true },
       { status: "Delivered", time: "Estimated: 2:00 PM - 4:00 PM", completed: false },
     ],
-  }
-
-  // Function to get badge color based on status
-  const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "delivered":
-        return (
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            Delivered
-          </Badge>
-        )
-      case "in transit":
-        return (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-            In Transit
-          </Badge>
-        )
-      case "processing":
-        return (
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-            Processing
-          </Badge>
-        )
-      case "scheduled":
-        return (
-          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-            Scheduled
-          </Badge>
-        )
-      case "failed delivery":
-        return (
-          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
-            Failed Delivery
-          </Badge>
-        )
-      case "cancelled":
-        return (
-          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-            Cancelled
-          </Badge>
-        )
-      default:
-        return <Badge variant="outline">{status}</Badge>
-    }
+    notes: "Please leave the package at the front door if no one answers.",
   }
 
   return (
-    <DashboardLayout navItems={adminNavItems} userType="admin">
-      <div className="container py-6">
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Link href="/admin/orders">
-              <Button variant="outline" size="icon" className="mr-2">
-                <ArrowLeft className="h-4 w-4" />
-                <span className="sr-only">Back</span>
+    <div className="min-h-screen bg-blue-50">
+      <header className="bg-white border-b sticky top-0 z-10">
+        <div className="container flex h-16 items-center px-4 sm:px-6 lg:px-8">
+          <Logo />
+          <div className="ml-auto flex items-center gap-4">
+            <Link href={`/customer/track/${orderId}`}>
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Tracking
               </Button>
             </Link>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Order: {orderId}</h1>
-              <div className="flex items-center gap-2">
-                <p className="text-muted-foreground">Created: {orderData.createdAt}</p>
-                {getStatusBadge(orderData.status)}
-              </div>
-            </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline">
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit Order
-            </Button>
-            <Button variant="destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Cancel Order
-            </Button>
+        </div>
+      </header>
+
+      <main className="container py-6 md:py-10">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold tracking-tight">Order Details: {orderId}</h1>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-muted-foreground">Current Status:</p>
+            <StatusBadge status={orderData.status} />
           </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Order Details</CardTitle>
+              <CardHeader className="pb-4">
+                <CardTitle>Order Summary</CardTitle>
+                <CardDescription>Order placed on {orderData.createdAt}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="items">
@@ -239,7 +180,11 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                           <div key={index} className="flex">
                             <div className="mr-4 flex flex-col items-center">
                               <div
-                                className={`rounded-full p-1 ${item.completed ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+                                className={`rounded-full p-1 ${
+                                  item.completed
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-muted text-muted-foreground"
+                                }`}
                               >
                                 {item.completed ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
                               </div>
@@ -262,6 +207,19 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                         <h3 className="font-medium">Payment Method</h3>
                         <p>{orderData.payment.method}</p>
                       </div>
+                      <div className="grid gap-2">
+                        <h3 className="font-medium">Payment Status</h3>
+                        <div className="flex items-center">
+                          <div className="bg-green-50 text-green-700 border border-green-200 rounded-full px-2 py-1 text-xs font-medium">
+                            {orderData.payment.status}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid gap-2">
+                        <h3 className="font-medium">Payment Date</h3>
+                        <p>{orderData.payment.date}</p>
+                      </div>
+                      <Separator />
                       <div className="grid gap-2">
                         <h3 className="font-medium">Payment Summary</h3>
                         <div className="rounded-md border p-4">
@@ -294,8 +252,45 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
 
             <Card>
               <CardHeader>
+                <CardTitle>Delivery Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="font-medium">Delivery Address</p>
+                        <p className="text-sm text-muted-foreground">{orderData.customer.address}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
+                      <div>
+                        <p className="font-medium">Estimated Delivery</p>
+                        <p className="text-sm text-muted-foreground">{orderData.estimatedDelivery}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <p className="font-medium">Delivery Notes</p>
+                      <p className="text-sm text-muted-foreground">{orderData.notes || "No special instructions"}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle>Driver Information</CardTitle>
-                <CardDescription>Current assigned driver for this order</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4">
@@ -304,26 +299,13 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   </div>
                   <div>
                     <p className="font-medium">{orderData.driver.name}</p>
-                    <p className="text-sm text-muted-foreground">ID: {orderData.driver.id}</p>
+                    <p className="text-sm text-muted-foreground">{orderData.driver.vehicle}</p>
                   </div>
-                  <div className="ml-auto flex gap-2">
+                  <div className="ml-auto">
                     <Button variant="outline" size="sm">
                       <Phone className="mr-2 h-4 w-4" />
-                      Call
+                      Contact Driver
                     </Button>
-                    <Button variant="outline" size="sm">
-                      Reassign
-                    </Button>
-                  </div>
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="font-medium">Vehicle</p>
-                    <p className="text-muted-foreground">{orderData.driver.vehicle}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-muted-foreground">{orderData.driver.phone}</p>
                   </div>
                 </div>
               </CardContent>
@@ -348,15 +330,6 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                 <Separator />
                 <div className="space-y-2">
                   <div className="flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="font-medium">Delivery Address</p>
-                      <p className="text-sm text-muted-foreground">{orderData.customer.address}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-2">
                     <Phone className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="font-medium">Phone</p>
@@ -374,46 +347,51 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Customer History
-                </Button>
-              </CardFooter>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Delivery Information</CardTitle>
+                <CardTitle>Actions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-start gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="font-medium">Estimated Delivery</p>
-                      <p className="text-sm text-muted-foreground">{orderData.estimatedDelivery}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
-                    <div>
-                      <p className="font-medium">Order Placed</p>
-                      <p className="text-sm text-muted-foreground">{orderData.createdAt}</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="flex gap-2">
-                <Button variant="outline" className="w-full">
-                  Reschedule
+              <CardContent className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  <Printer className="mr-2 h-4 w-4" />
+                  Print Order Details
                 </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Share Tracking Info
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Package className="mr-2 h-4 w-4" />
+                  Request Return
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <DollarSign className="mr-2 h-4 w-4" />
+                  View Invoice
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Delivery Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Timeline items={orderData.timeline} />
+              </CardContent>
+              <CardFooter>
+                <Link href={`/customer/track/${orderId}`} className="w-full">
+                  <Button variant="outline" className="w-full">
+                    <Truck className="mr-2 h-4 w-4" />
+                    Return to Live Tracking
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           </div>
         </div>
-      </div>
-    </DashboardLayout>
+      </main>
+    </div>
   )
 }
