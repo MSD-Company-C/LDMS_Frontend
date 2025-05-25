@@ -491,7 +491,7 @@ export default function LandingPage() {
               Join thousands of businesses that have improved their delivery operations with LogiTrack.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <ScheduleDemoDialog buttonVariant="outline" />
+              <ScheduleDemoDialog buttonVariant="secondary" />
               <ContactSalesDialog buttonVariant="default" />
             </div>
           </div>
