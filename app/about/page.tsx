@@ -5,7 +5,14 @@ import { ArrowLeft, Heart, Leaf, Target, Lightbulb } from "lucide-react"
 import { Logo } from "@/components/logo"
 
 // Inline reusable UI components
-const TeamMemberCard = ({ name, role, bio, imageSrc }) => (
+type TeamMemberCardProps = {
+  name: string
+  role: string
+  bio: string
+  imageSrc: string
+}
+
+const TeamMemberCard = ({ name, role, bio, imageSrc }: TeamMemberCardProps) => (
   <Card className="border-none shadow-md">
     <CardHeader className="text-center pb-2">
       <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-gray-100">
@@ -20,7 +27,13 @@ const TeamMemberCard = ({ name, role, bio, imageSrc }) => (
   </Card>
 )
 
-const ValueCard = ({ icon: Icon, title, description }) => (
+type ValueCardProps = {
+  icon: React.ElementType
+  title: string
+  description: string
+}
+
+const ValueCard = ({ icon: Icon, title, description }: ValueCardProps) => (
   <Card className="border-none shadow-md">
     <CardHeader className="pb-2">
       <div className="flex items-center gap-2">
@@ -36,7 +49,12 @@ const ValueCard = ({ icon: Icon, title, description }) => (
   </Card>
 )
 
-const StatItem = ({ value, label }) => (
+type StatItemProps = {
+  value: string
+  label: string
+}
+
+const StatItem = ({ value, label }: StatItemProps) => (
   <div className="space-y-2 text-center">
     <h3 className="text-4xl font-bold text-primary">{value}</h3>
     <p className="text-sm font-medium text-muted-foreground">{label}</p>
@@ -99,7 +117,7 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src="images/our-story.jpg"
                 alt="LogiTrack Team"
                 className="rounded-lg shadow-lg"
                 height={400}
