@@ -1,12 +1,19 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Timeline } from "@/components/timeline"
-import { Logo } from "@/components/logo"
-import { StatusBadge } from "@/components/status-badge"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Timeline } from "@/components/timeline";
+import { Logo } from "@/components/logo";
+import { StatusBadge } from "@/components/status-badge";
 import {
   Calendar,
   ArrowLeft,
@@ -22,18 +29,18 @@ import {
   DollarSign,
   Printer,
   Share2,
-} from "lucide-react"
-import { Separator } from "@/components/ui/separator"
-import { MapView } from "@/components/map-view"
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { MapView } from "@/components/map-view";
 
 interface OrderDetailsPageProps {
   params: {
-    orderId: string
-  }
+    orderId: string;
+  };
 }
 
 export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
-  const { orderId } = params
+  const { orderId } = params;
 
   // Mock data - in a real app, this would come from an API call
   const orderData = {
@@ -57,7 +64,12 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       },
     },
     items: [
-      { id: "ITM-001", name: "Premium Headphones", quantity: 1, price: "$89.99" },
+      {
+        id: "ITM-001",
+        name: "Premium Headphones",
+        quantity: 1,
+        price: "$89.99",
+      },
       { id: "ITM-002", name: "Wireless Charger", quantity: 2, price: "$29.99" },
       { id: "ITM-003", name: "Phone Case", quantity: 1, price: "$19.99" },
     ],
@@ -74,10 +86,14 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       { status: "Order Placed", time: "Jun 10, 9:30 AM", completed: true },
       { status: "Order Processed", time: "Jun 10, 11:45 AM", completed: true },
       { status: "Out for Delivery", time: "Jun 10, 1:15 PM", completed: true },
-      { status: "Delivered", time: "Estimated: 2:00 PM - 4:00 PM", completed: false },
+      {
+        status: "Delivered",
+        time: "Estimated: 2:00 PM - 4:00 PM",
+        completed: false,
+      },
     ],
     notes: "Please leave the package at the front door if no one answers.",
-  }
+  };
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -97,7 +113,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
       <main className="container py-6 md:py-10">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">Order Details: {orderId}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Order Details: {orderId}
+          </h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-muted-foreground">Current Status:</p>
             <StatusBadge status={orderData.status} />
@@ -109,7 +127,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             <Card>
               <CardHeader className="pb-4">
                 <CardTitle>Order Summary</CardTitle>
-                <CardDescription>Order placed on {orderData.createdAt}</CardDescription>
+                <CardDescription>
+                  Order placed on {orderData.createdAt}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="items">
@@ -124,15 +144,21 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                         <thead>
                           <tr className="border-b bg-muted/50">
                             <th className="p-2 text-left font-medium">Item</th>
-                            <th className="p-2 text-center font-medium">Quantity</th>
-                            <th className="p-2 text-right font-medium">Price</th>
+                            <th className="p-2 text-center font-medium">
+                              Quantity
+                            </th>
+                            <th className="p-2 text-right font-medium">
+                              Price
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
                           {orderData.items.map((item) => (
                             <tr key={item.id} className="border-b">
                               <td className="p-2">{item.name}</td>
-                              <td className="p-2 text-center">{item.quantity}</td>
+                              <td className="p-2 text-center">
+                                {item.quantity}
+                              </td>
                               <td className="p-2 text-right">{item.price}</td>
                             </tr>
                           ))}
@@ -186,15 +212,27 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                                     : "bg-muted text-muted-foreground"
                                 }`}
                               >
-                                {item.completed ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                                {item.completed ? (
+                                  <CheckCircle2 className="h-5 w-5" />
+                                ) : (
+                                  <Clock className="h-5 w-5" />
+                                )}
                               </div>
                               {index < orderData.timeline.length - 1 && (
-                                <div className={`h-full w-px my-1 ${item.completed ? "bg-primary" : "bg-muted"}`} />
+                                <div
+                                  className={`h-full w-px my-1 ${
+                                    item.completed ? "bg-primary" : "bg-muted"
+                                  }`}
+                                />
                               )}
                             </div>
                             <div className="space-y-1 pt-1">
-                              <p className="font-medium leading-none">{item.status}</p>
-                              <p className="text-sm text-muted-foreground">{item.time}</p>
+                              <p className="font-medium leading-none">
+                                {item.status}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {item.time}
+                              </p>
                             </div>
                           </div>
                         ))}
@@ -261,7 +299,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div>
                         <p className="font-medium">Delivery Address</p>
-                        <p className="text-sm text-muted-foreground">{orderData.customer.address}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {orderData.customer.address}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -270,7 +310,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div>
                         <p className="font-medium">Estimated Delivery</p>
-                        <p className="text-sm text-muted-foreground">{orderData.estimatedDelivery}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {orderData.estimatedDelivery}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -281,7 +323,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="font-medium">Delivery Notes</p>
-                      <p className="text-sm text-muted-foreground">{orderData.notes || "No special instructions"}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {orderData.notes || "No special instructions"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -299,7 +343,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   </div>
                   <div>
                     <p className="font-medium">{orderData.driver.name}</p>
-                    <p className="text-sm text-muted-foreground">{orderData.driver.vehicle}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {orderData.driver.vehicle}
+                    </p>
                   </div>
                   <div className="ml-auto">
                     <Button variant="outline" size="sm">
@@ -324,7 +370,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   </div>
                   <div>
                     <p className="font-medium">{orderData.customer.name}</p>
-                    <p className="text-sm text-muted-foreground">{orderData.customer.email}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {orderData.customer.email}
+                    </p>
                   </div>
                 </div>
                 <Separator />
@@ -333,7 +381,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     <Phone className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="font-medium">Phone</p>
-                      <p className="text-sm text-muted-foreground">{orderData.customer.phone}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {orderData.customer.phone}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -342,7 +392,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     <Mail className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">{orderData.customer.email}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {orderData.customer.email}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -393,5 +445,5 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         </div>
       </main>
     </div>
-  )
+  );
 }
