@@ -86,12 +86,15 @@ export default function WarehouseHomePage() {
           return;
         }
 
-        const res = await fetch("${apiBaseUrl}/api/orders", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           const text = await res.text();

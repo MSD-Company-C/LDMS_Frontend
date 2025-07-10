@@ -112,12 +112,15 @@ export default function DriverAssignmentsPage() {
           throw new Error("Token not found");
         }
 
-        const res = await fetch(`${apiBaseUrl}/api/orders`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to fetch orders: ${res.statusText}`);

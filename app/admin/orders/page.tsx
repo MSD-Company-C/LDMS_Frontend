@@ -99,14 +99,17 @@ async function handleAssign(orderId: number) {
       throw new Error("JWT token not found");
     }
 
-    const response = await fetch(`${apiBaseUrl}/api/orders/${orderId}/status`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status: "Order Processing" }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}/status`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: "Order Processing" }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to assign driver");
@@ -138,13 +141,16 @@ export default function OrdersPage() {
           return;
         }
 
-        const response = await fetch("http://localhost:8023/api/orders", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           const text = await response.text(); // to inspect backend error

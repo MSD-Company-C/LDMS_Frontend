@@ -94,7 +94,7 @@ export default function ScanOrdersPage() {
     try {
       // Fetch current order details
       const fetchResp = await fetch(
-        `${apiBaseUrl}/api/orders/${orderIdInput}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderIdInput}`,
         {
           method: "GET",
           headers: {
@@ -127,7 +127,7 @@ export default function ScanOrdersPage() {
 
       // Update order status to "Out for Delivery"
       const updateResp = await fetch(
-        `http://localhost:8023/api/orders/${orderIdInput}/status`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderIdInput}/status`,
         {
           method: "PUT",
           headers: {

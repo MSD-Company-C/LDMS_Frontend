@@ -52,7 +52,9 @@ export default function OrderTrackingPage() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`${apiBaseUrl}/api/orders/${orderId}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}`
+        );
         if (!res.ok) throw new Error("Failed to fetch order data");
         const data = await res.json();
         setOrderData(data);
@@ -243,14 +245,7 @@ export default function OrderTrackingPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Link
-                  href={`/customer/track/${orderId}/details`}
-                  className="w-full"
-                >
-                  <Button variant="outline" size="sm" className="w-full">
-                    View Order Details
-                  </Button>
-                </Link>
+
               </CardFooter>
             </Card>
           </div>

@@ -1,14 +1,35 @@
-"use client"
-import { Package, Clock, AlertTriangle, Camera, DollarSign } from "lucide-react"
+"use client";
+import {
+  Package,
+  Clock,
+  AlertTriangle,
+  Camera,
+  DollarSign,
+} from "lucide-react";
 
 // Driver navigation items
 const driverNavItems = [
-  { title: "Assignments", href: "/driver/assignments", icon: <Package className="h-4 w-4 mr-2" /> },
-  { title: "Status Updates", href: "/driver/status", icon: <Clock className="h-4 w-4 mr-2" /> },
-  { title: "Proof of Delivery", href: "/driver/pod", icon: <Camera className="h-4 w-4 mr-2" /> },
-  { title: "Report Issue", href: "/driver/issues", icon: <AlertTriangle className="h-4 w-4 mr-2" /> },
-  
-]
+  {
+    title: "Assignments",
+    href: "/driver/assignments",
+    icon: <Package className="h-4 w-4 mr-2" />,
+  },
+  {
+    title: "Status Updates",
+    href: "/driver/status",
+    icon: <Clock className="h-4 w-4 mr-2" />,
+  },
+  {
+    title: "Proof of Delivery",
+    href: "/driver/pod",
+    icon: <Camera className="h-4 w-4 mr-2" />,
+  },
+  {
+    title: "Report Issue",
+    href: "/driver/issues",
+    icon: <AlertTriangle className="h-4 w-4 mr-2" />,
+  },
+];
 
 // Mock status updates data
 const statusUpdates = {
@@ -52,4 +73,4 @@ const statusUpdates = {
       notes: "",
     },
   ],
-}
+};

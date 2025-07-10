@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Heart, Leaf, Target, Lightbulb } from "lucide-react"
 import { Logo } from "@/components/logo"
-
 // Inline reusable UI components
 type TeamMemberCardProps = {
   name: string

@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +40,7 @@ interface OrderDetailsPageProps {
 export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const { orderId } = params;
 
-  // Mock data - in a real app, this would come from an API call
+  // Mock data - replace this with your actual data fetching logic if needed
   const orderData = {
     id: orderId,
     status: "In Transit",
@@ -124,6 +122,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-6">
+            {/* Order Summary Card */}
             <Card>
               <CardHeader className="pb-4">
                 <CardTitle>Order Summary</CardTitle>
@@ -138,6 +137,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     <TabsTrigger value="tracking">Tracking</TabsTrigger>
                     <TabsTrigger value="payment">Payment</TabsTrigger>
                   </TabsList>
+
                   <TabsContent value="items" className="space-y-4 pt-4">
                     <div className="rounded-md border">
                       <table className="w-full">
@@ -187,6 +187,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       </div>
                     </div>
                   </TabsContent>
+
                   <TabsContent value="tracking" className="pt-4">
                     <div className="space-y-4">
                       <MapView
@@ -239,6 +240,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       </div>
                     </div>
                   </TabsContent>
+
                   <TabsContent value="payment" className="pt-4">
                     <div className="space-y-4">
                       <div className="grid gap-2">
@@ -288,6 +290,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               </CardContent>
             </Card>
 
+            {/* Delivery Information Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Delivery Information</CardTitle>
@@ -332,6 +335,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               </CardContent>
             </Card>
 
+            {/* Driver Information Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Driver Information</CardTitle>
@@ -358,7 +362,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             </Card>
           </div>
 
+          {/* Right Column */}
           <div className="space-y-6">
+            {/* Customer Information Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Customer Information</CardTitle>
@@ -401,6 +407,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               </CardContent>
             </Card>
 
+            {/* Actions Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Actions</CardTitle>
@@ -425,6 +432,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               </CardContent>
             </Card>
 
+            {/* Delivery Status Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Delivery Status</CardTitle>
