@@ -1,6 +1,6 @@
 "use client";
-import { useParams } from "next/navigation"; // ✅ Import this
 
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,17 +17,12 @@ import {
   BarChart3,
   Package,
   Truck,
-  Users,
   AlertTriangle,
-  CheckCircle2,
-  FileBarChart,
-  Warehouse,
   ArrowLeft,
   Phone,
   User,
   Mail,
   MapPin,
-  Calendar,
   Clock,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -50,29 +44,16 @@ const adminNavItems = [
     href: "/admin/drivers",
     icon: <Truck className="h-4 w-4 mr-2" />,
   },
-
   {
     title: "Issues",
     href: "/admin/issues",
     icon: <AlertTriangle className="h-4 w-4 mr-2" />,
   },
- 
-
-
 ];
 
-interface OrderDetailPageProps {
-  params: {
-    orderId: string;
-  };
-}
-
-
-
-
 export default function OrderDetailPage() {
-  const params = useParams(); // ✅ Use useParams to get route params
-  const orderId = params?.orderId as string; // ✅ Type-safe cast
+  const params = useParams();
+  const orderId = params?.orderId as string;
 
   const [orderData, setOrderData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -82,12 +63,10 @@ export default function OrderDetailPage() {
     const fetchOrder = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("JWT token not found");
-        }
+        if (!token) throw new Error("JWT token not found");
 
         const response = await fetch(
-          `http://localhost:8023/api/orders/${orderId}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -109,8 +88,6 @@ export default function OrderDetailPage() {
 
     fetchOrder();
   }, [orderId]);
-
-
 
   const getStatusBadge = (status: string) => {
     const lower = status.toLowerCase();
@@ -153,26 +130,30 @@ export default function OrderDetailPage() {
     return <Badge>{status}</Badge>;
   };
 
-  const renderTimestampRow = (label: string, value?: string | null) => {
-    // If no timestamp, stage pending
+  const renderTimestampRow = (
+    label: string,
+    value?: string | null,
+    key?: string
+  ) => {
     if (!value) {
-      return renderYellow(label, "Pending");
+      return renderYellow(label, "Pending", key);
     }
 
     const timestampDate = new Date(value);
     const now = new Date();
 
-    // If timestamp is in the future, also pending/yellow
     if (timestampDate > now) {
-      return renderYellow(label, "Pending");
+      return renderYellow(label, "Pending", key);
     }
 
-    // Else completed (timestamp is valid and <= now)
-    return renderGreen(label, value);
+    return renderGreen(label, value, key);
   };
 
-  const renderGreen = (label: string, value: string) => (
-    <div className="flex items-start gap-2 p-2 border rounded-md bg-green-50 border-green-200">
+  const renderGreen = (label: string, value: string, key?: string) => (
+    <div
+      key={key}
+      className="flex items-start gap-2 p-2 border rounded-md bg-green-50 border-green-200"
+    >
       <Clock className="h-4 w-4 mt-0.5 text-green-700" />
       <div>
         <p className="font-medium text-green-700">{label}</p>
@@ -181,8 +162,11 @@ export default function OrderDetailPage() {
     </div>
   );
 
-  const renderYellow = (label: string, value: string) => (
-    <div className="flex items-start gap-2 p-2 border rounded-md bg-yellow-50 border-yellow-200">
+  const renderYellow = (label: string, value: string, key?: string) => (
+    <div
+      key={key}
+      className="flex items-start gap-2 p-2 border rounded-md bg-yellow-50 border-yellow-200"
+    >
       <Clock className="h-4 w-4 mt-0.5 text-yellow-700" />
       <div>
         <p className="font-medium text-yellow-700">{label}</p>
@@ -190,8 +174,6 @@ export default function OrderDetailPage() {
       </div>
     </div>
   );
-  
-  
 
   if (loading) {
     return (
@@ -333,13 +315,12 @@ export default function OrderDetailPage() {
                 label: "Delivered",
                 timestamp: orderData.orderDelivered?.displayTimestamp,
               },
+              {
+                label: "Estimated Delivery",
+                timestamp: orderData.estimatedDelivery,
+              },
             ].map(({ label, timestamp }) =>
-              renderTimestampRow(label, timestamp)
-            )}
-
-            {renderTimestampRow(
-              "Estimated Delivery",
-              orderData.estimatedDelivery
+              renderTimestampRow(label, timestamp, label)
             )}
           </CardContent>
         </Card>

@@ -67,7 +67,7 @@ export default function StatusUpdatePage({
   const handleUpdateStatus = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8023/api/orders/${orderId}/status`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: {

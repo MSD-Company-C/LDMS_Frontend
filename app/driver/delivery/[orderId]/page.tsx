@@ -69,11 +69,14 @@ export default function DeliveryDetailPage() {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`${apiBaseUrl}/api/orders/${orderId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to fetch order data (status: ${res.status})`);

@@ -90,14 +90,17 @@ export default function DriversPage() {
           return;
         }
 
-        const res = await fetch("${apiBaseUrl}/api/drivers", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // if your backend uses cookies for sessions (optional)
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/drivers`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // if your backend uses cookies for sessions (optional)
+          }
+        );
 
         if (!res.ok) {
           const text = await res.text();

@@ -37,6 +37,7 @@ export function DashboardLayout({ children, navItems, userType }: DashboardLayou
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
+          {/* Left side: Dashboard title and logo only */}
           <div className="flex items-center gap-4">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
@@ -49,11 +50,15 @@ export function DashboardLayout({ children, navItems, userType }: DashboardLayou
                 <MobileNav items={navItems} setOpen={setOpen} />
               </SheetContent>
             </Sheet>
-            <Link href={`/${userType}/dashboard`} className="hidden items-center gap-2 md:flex">
+            <Link
+              href={`/${userType}/dashboard`}
+              className="hidden items-center gap-2 md:flex"
+            >
               <Truck className="h-6 w-6" />
               <span className="font-bold">{userTypeTitle}</span>
             </Link>
           </div>
+          {/* Right side: MainNav + UserNav */}
           <div className="flex items-center gap-4">
             <div className="hidden md:flex">
               <MainNav items={navItems} />
@@ -64,5 +69,5 @@ export function DashboardLayout({ children, navItems, userType }: DashboardLayou
       </header>
       <main className="flex-1">{children}</main>
     </div>
-  )
+  );
 }

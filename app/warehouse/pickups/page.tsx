@@ -54,18 +54,21 @@ export default function PendingScansPage() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem(`token`);
         if (!token) {
           console.error("No token found, user not authenticated");
           return;
         }
 
-        const res = await fetch("${apiBaseUrl}/warehouse/all-orders", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/warehouse/all-orders`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch orders");
         const data: Order[] = await res.json();
