@@ -1,5 +1,5 @@
 ## Team Contributions
-
+Live Doc: https://docs.google.com/document/d/1CMU39eZqfhyDXWfSw9L1jEu907MPaEl7aC0crZOps8A/edit?usp=sharing
 ### Team 1
 
 | Member Index | Name with Initials     | Contribution |
